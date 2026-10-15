@@ -64,6 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
         _alarms = list;
         _isLoading = false;
       });
+      // Ensure all enabled alarms are armed with live in-app timers
+      for (final a in list) {
+        if (a.isEnabled) {
+          _alarmService.scheduleAlarm(a);
+        }
+      }
     }
   }
 
