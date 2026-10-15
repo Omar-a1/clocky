@@ -33,6 +33,11 @@ class GoogleClockNavBar extends StatelessWidget {
         ),
         destinations: const [
           NavigationDestination(
+            icon: Icon(Icons.alarm_outlined),
+            selectedIcon: Icon(Icons.alarm_rounded),
+            label: 'Alarm',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.hourglass_empty_rounded),
             selectedIcon: Icon(Icons.hourglass_bottom_rounded),
             label: 'Timer',

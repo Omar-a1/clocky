@@ -232,28 +232,7 @@ class AlarmService {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? stored = prefs.getStringList(_storageKey);
     if (stored == null || stored.isEmpty) {
-      final defaultAlarms = [
-        AlarmModel(
-          id: 1,
-          hour: 6,
-          minute: 30,
-          label: 'صلاة الفجر والورد الصباحي',
-          isEnabled: true,
-          repeatType: RepeatType.daily,
-          tone: 'نغمة هادئة (Chime)',
-        ),
-        AlarmModel(
-          id: 2,
-          hour: 8,
-          minute: 0,
-          label: 'بدء العمل والمذاكرة',
-          isEnabled: false,
-          repeatType: RepeatType.weekdays,
-          tone: 'إلكتروني حديث (Digital)',
-        ),
-      ];
-      await saveAlarms(defaultAlarms);
-      return defaultAlarms;
+      return [];
     }
 
     try {

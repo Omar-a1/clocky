@@ -7,6 +7,8 @@ import '../widgets/alarm_card.dart';
 import '../widgets/add_alarm_sheet.dart';
 import '../widgets/floating_nav_bar.dart';
 import '../widgets/ringing_dialog.dart';
+import '../widgets/timer_view.dart';
+import '../widgets/settings_view.dart';
 import '../theme/app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final AlarmService _alarmService = AlarmService();
   List<AlarmModel> _alarms = [];
   bool _isLoading = true;
-  int _currentNavIndex = 0; // 0: Timer / Alarms, 1: Settings
+  int _currentNavIndex = 0; // 0: Alarm, 1: Timer, 2: Settings
 
   late Timer _clockTimer;
   DateTime _currentTime = DateTime.now();
@@ -181,19 +183,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.darkBackground,
-      appBar: AppBar(
-        title: const Text('ساعة Google'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert_rounded),
-            color: AppTheme.textPrimary,
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // Removed AppBar (no title and no 3 dots icon)
       body: SafeArea(
-        top: false,
-        child: _currentNavIndex == 0 ? _buildTimerTab() : _buildSettingsTab(),
+        child: IndexedStack(
+          index: _currentNavIndex,
+          children: [
+            _buildAlarmTab(),
+            const TimerView(),
+            const InteractiveSettingsView(),
+          ],
+        ),
       ),
       bottomNavigationBar: GoogleClockNavBar(
         currentIndex: _currentNavIndex,
@@ -215,20 +214,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildTimerTab() {
+  Widget _buildAlarmTab() {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: AppTheme.activeAccent),
       );
     }
 
-    // Categorize into sections strictly matching Google Clock: 'Wake up' and 'Other'
     final wakeUpAlarms = <AlarmModel>[];
     final otherAlarms = <AlarmModel>[];
 
     for (final alarm in _alarms) {
       final labelLower = alarm.label.toLowerCase();
-      // Morning / Wake up hours (5 AM to 10 AM) or label containing wake/استيقاظ/صباح
       final isMorningHour = alarm.hour >= 5 && alarm.hour <= 10;
       final isWakeUpKeyword = labelLower.contains('wake') ||
           labelLower.contains('استيقاظ') ||
@@ -246,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        // Digital Live Time Sub-Header
+        // Live Digital Clock Sub-Header
         SliverToBoxAdapter(
           child: _buildDigitalClockHeader(),
         ),
@@ -447,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppTheme.cardColor,
             ),
             child: const Icon(
-              Icons.hourglass_empty_rounded,
+              Icons.alarm_off_rounded,
               size: 56,
               color: AppTheme.textSecondary,
             ),
@@ -466,136 +463,6 @@ class _HomeScreenState extends State<HomeScreen> {
             'اضغط على زر (+) في الأسفل لإضافة منبه جديد',
             style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingsTab() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16),
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Text(
-            'عام',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.sectionHeader,
-            ),
-          ),
-        ),
-        _buildSettingCard(
-          icon: Icons.brightness_6_rounded,
-          title: 'المظهر (Theme)',
-          subtitle: 'Google Clock Dark Theme (Material You)',
-          trailing: const Text(
-            'داكن',
-            style: TextStyle(
-              color: AppTheme.activeAccent,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        _buildSettingCard(
-          icon: Icons.notifications_active_outlined,
-          title: 'إشعارات الخلفية',
-          subtitle: 'تفعيل التنبيهات الدقيقة حتى عند إغلاق التطبيق',
-          trailing: const Icon(Icons.check_circle_rounded, color: AppTheme.activeAccent),
-        ),
-        const SizedBox(height: 10),
-        _buildSettingCard(
-          icon: Icons.vibration_rounded,
-          title: 'الاهتزاز الافتراضي',
-          subtitle: 'اهتزاز تدريجي عند انطلاق الرنين',
-          trailing: const Icon(Icons.check_circle_rounded, color: AppTheme.activeAccent),
-        ),
-        const SizedBox(height: 10),
-        _buildSettingCard(
-          icon: Icons.snooze_rounded,
-          title: 'مدة التأجيل الافتراضية',
-          subtitle: '5 دقائق',
-          trailing: const Text(
-            '5 د',
-            style: TextStyle(
-              color: AppTheme.activeAccent,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Text(
-            'حول',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.sectionHeader,
-            ),
-          ),
-        ),
-        _buildSettingCard(
-          icon: Icons.info_outline_rounded,
-          title: 'ساعة Google (Clock)',
-          subtitle: 'Material You Design 3 • Inspired UI',
-          trailing: const Icon(Icons.chevron_left_rounded, color: AppTheme.textSecondary),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSettingCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Widget trailing,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: AppTheme.cardColor,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppTheme.activeContainer.withValues(alpha: 0.45),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(icon, color: AppTheme.activeAccent, size: 22),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          trailing,
         ],
       ),
     );
