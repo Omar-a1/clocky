@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/alarm_model.dart';
+import '../theme/app_theme.dart';
 
 class RingingDialog extends StatefulWidget {
   final AlarmModel alarm;
@@ -56,15 +57,15 @@ class _RingingDialogState extends State<RingingDialog>
       child: Container(
         padding: const EdgeInsets.all(28),
         decoration: BoxDecoration(
-          color: const Color(0xFF0F172A),
+          color: AppTheme.cardColor,
           borderRadius: BorderRadius.circular(36),
           border: Border.all(
-            color: const Color(0xFFF59E0B).withValues(alpha: 0.5),
-            width: 2,
+            color: AppTheme.activeAccent.withValues(alpha: 0.5),
+            width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFF59E0B).withValues(alpha: 0.25),
+              color: AppTheme.activeAccent.withValues(alpha: 0.15),
               blurRadius: 35,
               spreadRadius: 2,
             ),
@@ -85,16 +86,16 @@ class _RingingDialogState extends State<RingingDialog>
                       padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color(0xFFF59E0B).withValues(alpha: 0.2),
+                        color: AppTheme.activeContainer.withValues(alpha: 0.6),
                         border: Border.all(
-                          color: const Color(0xFFF59E0B),
+                          color: AppTheme.activeAccent,
                           width: 2,
                         ),
                       ),
                       child: const Icon(
                         Icons.alarm_on_rounded,
                         size: 58,
-                        color: Color(0xFFF59E0B),
+                        color: AppTheme.activeAccent,
                       ),
                     ),
                   ),
@@ -105,9 +106,9 @@ class _RingingDialogState extends State<RingingDialog>
             Text(
               widget.alarm.formattedTime,
               style: const TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
+                fontSize: 38,
+                fontWeight: FontWeight.w300,
+                color: AppTheme.textPrimary,
                 letterSpacing: 1,
               ),
             ),
@@ -118,15 +119,15 @@ class _RingingDialogState extends State<RingingDialog>
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF38BDF8),
+                color: AppTheme.activeAccent,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'النغمة: ${widget.alarm.tone}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppTheme.textSecondary,
               ),
             ),
             const SizedBox(height: 32),
@@ -150,22 +151,22 @@ class _RingingDialogState extends State<RingingDialog>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E293B),
+                          color: AppTheme.darkBackground,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.snooze_rounded,
-                                color: Color(0xFF38BDF8), size: 20),
+                                color: AppTheme.activeAccent, size: 20),
                             SizedBox(width: 8),
                             Text(
                               'تأجيل 5 د',
                               style: TextStyle(
-                                color: Color(0xFF38BDF8),
+                                color: AppTheme.activeAccent,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
@@ -183,13 +184,13 @@ class _RingingDialogState extends State<RingingDialog>
                   child: ElevatedButton(
                     onPressed: widget.onDismiss,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent.shade400,
-                      foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFFBA1A1A),
+                      foregroundColor: const Color(0xFFFFDAD6),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      elevation: 6,
+                      elevation: 0,
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

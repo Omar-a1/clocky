@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/alarm_model.dart';
+import '../theme/app_theme.dart';
 
 class AddAlarmSheet extends StatefulWidget {
   final Function(AlarmModel) onSave;
@@ -47,13 +48,13 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             timePickerTheme: TimePickerThemeData(
-              backgroundColor: const Color(0xFF1E293B),
-              hourMinuteColor: const Color(0xFF0F172A),
-              hourMinuteTextColor: const Color(0xFF38BDF8),
-              dialHandColor: const Color(0xFF38BDF8),
-              dialBackgroundColor: const Color(0xFF0F172A),
-              dialTextColor: Colors.white,
-              entryModeIconColor: const Color(0xFF38BDF8),
+              backgroundColor: AppTheme.cardColor,
+              hourMinuteColor: AppTheme.darkBackground,
+              hourMinuteTextColor: AppTheme.activeAccent,
+              dialHandColor: AppTheme.activeAccent,
+              dialBackgroundColor: AppTheme.darkBackground,
+              dialTextColor: AppTheme.textPrimary,
+              entryModeIconColor: AppTheme.activeAccent,
             ),
           ),
           child: child!,
@@ -85,8 +86,8 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF0F172A),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
+        color: AppTheme.darkBackground,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -96,10 +97,10 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
             // Handle bar
             Center(
               child: Container(
-                width: 48,
-                height: 5,
+                width: 44,
+                height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white24,
+                  color: AppTheme.textSecondary.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -110,8 +111,8 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 20),
@@ -120,17 +121,13 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
             GestureDetector(
               onTap: _pickTime,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 22),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF1E293B), Color(0xFF162032)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(24),
+                  color: AppTheme.cardColor,
+                  borderRadius: BorderRadius.circular(28),
                   border: Border.all(
-                    color: const Color(0xFF38BDF8).withValues(alpha: 0.3),
-                    width: 1.5,
+                    color: AppTheme.activeAccent.withValues(alpha: 0.2),
+                    width: 1.2,
                   ),
                 ),
                 child: Row(
@@ -141,26 +138,26 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
                     Text(
                       '$formattedHour:$formattedMinute',
                       style: const TextStyle(
-                        fontSize: 54,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF38BDF8),
-                        letterSpacing: 2,
+                        fontSize: 52,
+                        fontWeight: FontWeight.w300,
+                        color: AppTheme.activeAccent,
+                        letterSpacing: -1,
                       ),
                     ),
                     const SizedBox(width: 12),
                     Text(
                       period,
                       style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.textSecondary,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 14),
                     const Icon(
                       Icons.edit_calendar_rounded,
-                      color: Color(0xFF38BDF8),
-                      size: 26,
+                      color: AppTheme.activeAccent,
+                      size: 24,
                     ),
                   ],
                 ),
@@ -171,15 +168,15 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
             // Alarm Label
             TextField(
               controller: _labelController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: AppTheme.textPrimary),
               decoration: InputDecoration(
                 labelText: 'اسم المنبه',
-                labelStyle: const TextStyle(color: Colors.white60),
-                prefixIcon: const Icon(Icons.label_outline, color: Color(0xFF38BDF8)),
+                labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                prefixIcon: const Icon(Icons.label_outline, color: AppTheme.activeAccent),
                 filled: true,
-                fillColor: const Color(0xFF1E293B),
+                fillColor: AppTheme.cardColor,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -192,7 +189,7 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Colors.white70,
+                color: AppTheme.textSecondary,
               ),
             ),
             const SizedBox(height: 8),
@@ -212,14 +209,14 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(18),
+                color: AppTheme.cardColor,
+                borderRadius: BorderRadius.circular(20),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: _selectedTone,
-                  dropdownColor: const Color(0xFF1E293B),
-                  icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF38BDF8)),
+                  dropdownColor: AppTheme.cardColor,
+                  icon: const Icon(Icons.arrow_drop_down, color: AppTheme.activeAccent),
                   isExpanded: true,
                   items: _tones.map((tone) {
                     return DropdownMenuItem<String>(
@@ -227,11 +224,11 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
                       child: Row(
                         children: [
                           const Icon(Icons.music_note_rounded,
-                              size: 18, color: Color(0xFFF59E0B)),
+                              size: 18, color: AppTheme.activeAccent),
                           const SizedBox(width: 10),
                           Text(
                             tone,
-                            style: const TextStyle(color: Colors.white, fontSize: 14),
+                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
                           ),
                         ],
                       ),
@@ -249,8 +246,8 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(18),
+                color: AppTheme.cardColor,
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,15 +255,14 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
                   const Row(
                     children: [
                       Icon(Icons.vibration_rounded,
-                          color: Color(0xFF38BDF8), size: 20),
+                          color: AppTheme.activeAccent, size: 20),
                       SizedBox(width: 10),
                       Text('الاهتزاز',
-                          style: TextStyle(color: Colors.white, fontSize: 14)),
+                          style: TextStyle(color: AppTheme.textPrimary, fontSize: 14)),
                     ],
                   ),
-                  Switch.adaptive(
+                  Switch(
                     value: _isVibrate,
-                    activeThumbColor: const Color(0xFF38BDF8),
                     onChanged: (val) => setState(() => _isVibrate = val),
                   ),
                 ],
@@ -293,13 +289,13 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF38BDF8),
-                foregroundColor: const Color(0xFF0F172A),
+                backgroundColor: AppTheme.activeAccent,
+                foregroundColor: const Color(0xFF003731),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                elevation: 6,
+                elevation: 0,
               ),
               child: const Text(
                 'حفظ المنبه',
@@ -320,17 +316,17 @@ class _AddAlarmSheetState extends State<AddAlarmSheet> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: const Color(0xFF38BDF8),
-      backgroundColor: const Color(0xFF1E293B),
+      selectedColor: AppTheme.activeContainer,
+      backgroundColor: AppTheme.cardColor,
       labelStyle: TextStyle(
-        color: isSelected ? const Color(0xFF0F172A) : Colors.white70,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        color: isSelected ? AppTheme.activeAccent : AppTheme.textSecondary,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         fontSize: 13,
       ),
       side: BorderSide(
         color: isSelected
-            ? const Color(0xFF38BDF8)
-            : Colors.white.withValues(alpha: 0.1),
+            ? AppTheme.activeAccent.withValues(alpha: 0.4)
+            : Colors.white.withValues(alpha: 0.05),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       onSelected: (_) {
